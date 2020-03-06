@@ -12,7 +12,7 @@ const getAllPosts = (req, res) => {
 
 const getPostById = (req, res) => {
   const { id } = req.params;
-  const postOrNull = postsData.find(post => post.id === id);
+  const postOrNull = postsData.find(post => String(post.id) === id);
 
   if (!postOrNull) {
     res.status(404).send('Post not found!');
@@ -27,7 +27,14 @@ const createPost = async (req, res) => {
     id
   };
 
-  await writeFile(PATH_TO_DATA, JSON.stringify([...postsData, newPost]));
+  try {
+    await await writeFile(
+      PATH_TO_DATA,
+      JSON.stringify([...postsData, newPost])
+    );
+  } catch (e) {
+    res.status(503).send('Fail to add a new post');
+  }
 
   return res.status(201).json(newPost);
 };
@@ -49,7 +56,11 @@ const updatePostById = async (req, res) => {
     return post.id === id ? updatedPost : post;
   });
 
-  await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
+  try {
+    await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
+  } catch (e) {
+    res.status(503).send('Fail to update a new post');
+  }
 
   return res.status(200).json(updatedPost);
 };
@@ -64,7 +75,11 @@ const deletePostById = async (req, res) => {
 
   const updateDatabase = postsData.filter(post => id !== post.id);
 
-  await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
+  try {
+    await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
+  } catch (e) {
+    res.status(503).send('Fail to delete post');
+  }
 
   return res.status(200).json(id);
 };

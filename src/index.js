@@ -15,6 +15,7 @@ const port = 3000;
 logger.info('🤖 Initializing middleware');
 
 app.use(bodyParser.json());
+
 app.use(morgan('tiny', { stream: logger.stream }));
 app.use('/', router);
 app.use(errorHandler);
