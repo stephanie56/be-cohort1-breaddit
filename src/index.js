@@ -6,6 +6,10 @@ const router = require('./api');
 const { logger } = require('./utils/logger');
 const { errorHandler } = require('./middleware/error-handler');
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('src/swagger.yaml');
+
 // Create a new express application instance
 const app = express();
 
@@ -18,6 +22,7 @@ app.use(bodyParser.json());
 
 app.use(morgan('tiny', { stream: logger.stream }));
 app.use('/', router);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(errorHandler);
 
 // Serve the application at the given port

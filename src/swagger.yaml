@@ -1,0 +1,86 @@
+swagger: "2.0"
+info:
+  title: Breaddit API
+  description: API description for Breaddit.
+  version: 1.0.0
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+paths:
+  /posts:
+    get:
+      summary: Returns a list of posts.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    post:
+      summary: Create a new post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                score:
+                  type: number
+                image:
+                  type: string
+                author:
+                  type: string
+                text:
+                  type: string
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+        422:
+          description: Unprocessable Entity
+    put:
+      summary: Update an existing post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                score:
+                  type: number
+                image:
+                  type: string
+                author:
+                  type: string
+                text:
+                  type: string
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+        422:
+          description: Unprocessable Entity
+    delete:
+      summary: Delete an existing post.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
