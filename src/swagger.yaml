@@ -1,0 +1,105 @@
+swagger: "2.0"
+info:
+  title: Breaddit API
+  description: API description for Breaddit.
+  version: 1.0.0
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+paths:
+  /posts:
+    get:
+      summary: Returns a list of posts.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+    post:
+      summary: Create a new post.
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Object to create post."
+          required: true
+          schema:
+            $ref: "#/definitions/Post"
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+        422:
+          description: Unprocessable Entity
+  /posts/{id}:
+    get:
+      summary: Find a post by its ID.
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the post that needs to be updated"
+          required: true
+          type: "string"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+        404:
+          description: Post Not Found
+    put:
+      summary: Update an existing post.
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the post that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated post object"
+          required: true
+          schema:
+            $ref: "#/definitions/Post"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+        404:
+          description: Post Not Found
+        422:
+          description: Unprocessable Entity
+    delete:
+      summary: Delete an existing post.
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the post that needs to be deleted"
+          required: true
+          type: "string"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+definitions:
+  Post:
+    type: "object"
+    properties:
+      title:
+        type: string
+        example: "My first post"
+      score:
+        type: number
+        example: 130
+      image:
+        type: string
+        example: "http://example.com/123.jpg"
+      author:
+        type: string
+        example: "user123"
+      text:
+        type: string
+        example: "This is my first post..."

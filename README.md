@@ -1,3 +1,11 @@
+## How to Test
+
+- Clone this repository
+- Run `npm install` to install packages
+- Run `npm run start` to start the application
+- The server is open at `http://localhost:3000/`
+- Swagger documentation is available at `http://localhost:3000/api-docs`
+
 ## Installation
 
 Install Docker Compose:
