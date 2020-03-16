@@ -4,7 +4,10 @@ const {
   createPostValidator,
   updatePostValidator
 } = require('../../utils/validators');
-const { validatePost } = require('../../middleware/validate-post');
+const {
+  validatePost,
+  findPostById
+} = require('../../middleware/validate-post');
 
 const {
   getAllPosts,
@@ -17,10 +20,16 @@ const {
 const router = express.Router();
 
 router.get('', getAllPosts);
-router.get('/:id', getPostById);
-router.put('', updatePostValidator, validatePost, updatePostById);
+router.get('/:id', findPostById, getPostById);
+router.put(
+  '/:id',
+  updatePostValidator,
+  validatePost,
+  findPostById,
+  updatePostById
+);
 router.post('', createPostValidator, validatePost, createPost);
-router.delete('', deletePostById);
+router.delete('/:id', findPostById, deletePostById);
 
 module.exports = {
   postsRouter: router

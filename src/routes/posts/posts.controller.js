@@ -11,13 +11,7 @@ const getAllPosts = (req, res) => {
 };
 
 const getPostById = (req, res) => {
-  const { id } = req.params;
-  const postOrNull = postsData.find(post => String(post.id) === id);
-
-  if (!postOrNull) {
-    res.status(404).send('Post not found!');
-  }
-  return res.status(200).json(postOrNull);
+  return res.status(200).json(req.post);
 };
 
 const createPost = async (req, res) => {
@@ -28,27 +22,23 @@ const createPost = async (req, res) => {
   };
 
   try {
-    await await writeFile(
-      PATH_TO_DATA,
-      JSON.stringify([...postsData, newPost])
-    );
+    await writeFile(PATH_TO_DATA, JSON.stringify([...postsData, newPost]));
   } catch (e) {
-    res.status(503).send('Fail to add a new post');
+    throw new Error(
+      JSON.stringify({
+        status: 'SERVICE_UNAVAILABLE',
+        message: 'Fail to add a new post'
+      })
+    );
   }
 
   return res.status(201).json(newPost);
 };
 
 const updatePostById = async (req, res) => {
-  const { id } = req.body;
-  const postOrNull = postsData.find(post => post.id === id);
-
-  if (!postOrNull) {
-    res.status(404).send('Post not found!');
-  }
-
+  const { id } = req.params;
   const updatedPost = {
-    ...postOrNull,
+    ...req.post,
     ...req.body
   };
 
@@ -59,29 +49,33 @@ const updatePostById = async (req, res) => {
   try {
     await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
   } catch (e) {
-    res.status(503).send('Fail to update a new post');
+    throw new Error(
+      JSON.stringify({
+        status: 'SERVICE_UNAVAILABLE',
+        message: 'Fail to update a new post'
+      })
+    );
   }
 
   return res.status(200).json(updatedPost);
 };
 
 const deletePostById = async (req, res) => {
-  const { id } = req.body;
-  const postOrNull = postsData.find(post => post.id === id);
-
-  if (!postOrNull) {
-    res.status(404).send('Post not found!');
-  }
-
-  const updateDatabase = postsData.filter(post => id !== post.id);
+  const { id } = req.params;
+  const updatedDatabase = postsData.filter(post => id !== post.id);
 
   try {
-    await writeFile(PATH_TO_DATA, JSON.stringify(updateDatabase));
+    await writeFile(PATH_TO_DATA, JSON.stringify(updatedDatabase));
   } catch (e) {
-    res.status(503).send('Fail to delete post');
+    throw new Error(
+      JSON.stringify({
+        status: 'SERVICE_UNAVAILABLE',
+        message: 'Fail to delete a new post'
+      })
+    );
   }
 
-  return res.status(200).json(id);
+  return res.status(200).json({ id });
 };
 
 module.exports = {

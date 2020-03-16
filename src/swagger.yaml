@@ -18,23 +18,13 @@ paths:
           description: OK
     post:
       summary: Create a new post.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                score:
-                  type: number
-                image:
-                  type: string
-                author:
-                  type: string
-                text:
-                  type: string
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Object to create post."
+          required: true
+          schema:
+            $ref: "#/definitions/Post"
       produces:
         - application/json
       responses:
@@ -42,45 +32,74 @@ paths:
           description: Created
         422:
           description: Unprocessable Entity
-    put:
-      summary: Update an existing post.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                score:
-                  type: number
-                image:
-                  type: string
-                author:
-                  type: string
-                text:
-                  type: string
+  /posts/{id}:
+    get:
+      summary: Find a post by its ID.
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID of the post that needs to be updated"
+          required: true
+          type: "string"
       produces:
         - application/json
       responses:
         200:
           description: OK
+        404:
+          description: Post Not Found
+    put:
+      summary: Update an existing post.
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the post that needs to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated post object"
+          required: true
+          schema:
+            $ref: "#/definitions/Post"
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+        404:
+          description: Post Not Found
         422:
           description: Unprocessable Entity
     delete:
       summary: Delete an existing post.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: number
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "id of the post that needs to be deleted"
+          required: true
+          type: "string"
       produces:
         - application/json
       responses:
         200:
           description: OK
+definitions:
+  Post:
+    type: "object"
+    properties:
+      title:
+        type: string
+        example: "My first post"
+      score:
+        type: number
+        example: 130
+      image:
+        type: string
+        example: "http://example.com/123.jpg"
+      author:
+        type: string
+        example: "user123"
+      text:
+        type: string
+        example: "This is my first post..."
